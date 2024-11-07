@@ -3,7 +3,7 @@
 
 | Last Name | First Name | GitHub User Name |
 |-----------|------------|------------------|
-| TBD       | TBD        | TBD              |
+| Dundas    | Trevor     | Tdundy           |
 | TBD       | TBD        | TBD              |
 | TBD       | TBD        | TBD              |
 
