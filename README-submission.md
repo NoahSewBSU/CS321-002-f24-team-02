@@ -4,7 +4,7 @@
 | Last Name | First Name | GitHub User Name |
 |-----------|------------|------------------|
 | Dundas    | Trevor     | Tdundy           |
-| TBD       | TBD        | TBD              |
+| Seward    | Noah       | NoahSewBSU       |
 | TBD       | TBD        | TBD              |
 
 # Test Results
