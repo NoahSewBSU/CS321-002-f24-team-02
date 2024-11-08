@@ -1,9 +1,9 @@
 ### Project Log
-## Team 3
+## Team 2
 
-`(studentA)`
-`(studentC)`
-`(studentB)`
+`(Noah Seward)`
+`(Trevor Dundy)`
+`(Ryker Waters)`
 
 
 # Sprint 1 (November 3rd, Wednesday 2023 - November 19th, Friday 2023)
