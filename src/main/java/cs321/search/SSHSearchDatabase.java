@@ -1,35 +1,21 @@
 package cs321.search;
 
-// import java.sql.DriverManager;
-// import java.sql.SQLException;
-import java.sql.*;
-// import cs321.btree.BTree;
-// import cs321.common.ParseArgumentException;
-// import cs321.common.ParseArgumentUtils;
+import cs321.btree.BTree;
+import cs321.common.ParseArgumentException;
+import cs321.common.ParseArgumentUtils;
 
-
-/**
- * The driver class for searching a Database of a B-Tree.
- */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SSHSearchDatabase
 {
-
-/* Method to connect to given database; this is being set to FakeData.db for smoke testing purposes */
-    // public static void connect() {
-    //     // connection string 
-    //     var url = "jdbc:sqlite:fakedata.db";
-
-    //     try (var conn = DriverManager.getConnection(url)) {
-    //         System.out.println("Connection to SQLite has been established.");
-    //     } catch (SQLException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
-	
-    public static void main(String[] args) {
+      public static void main(String[] args)
+      {
         if (args.length < 3) {
-            System.out.println("Usage: java -jar build/libs/SSHSearchDatabase.jar --database=<database.db> --type=<table-type> --top-frequency=<max num items>\n");
+            System.out.println("Usage: java -jar build/libs/SSHSearchDatabase.jar --database=<database.db> --type=<table-type> --top-frequency=<top frequency>\n");
             return;
         }
 
@@ -41,36 +27,69 @@ public class SSHSearchDatabase
             if (arg.startsWith("--database=")) {
                 database = arg.substring("--database=".length());
             } else if (arg.startsWith("--type=")) {
-                type = arg.substring("-type=".length());
+                type = arg.substring("--type=".length());
+                type = type.replaceAll("-","");
             } else if (arg.startsWith("--top-frequency=")) {
                 topFrequency = Integer.parseInt(arg.substring("--top-frequency=".length()));
             }
         }
 
         if (database == null || type == null || topFrequency <= 0) {
-            System.out.println("Invalid arguments.\n");
+            System.out.println("Invalid arguments. Try --database=<database> --type=<table-type> --topfrequency=<10/25/50>\n");
             return;
         }
 
-        String url = "jdbc:sqlite:" + database;
+        /* Smoke test to view results from args */
+        // System.out.println(database+"\n");
+        // System.out.println(type+"\n");
+        // System.out.println(topFrequency+"\n");
 
-        try (Connection conn = DriverManager.getConnection(url)) {
-            if (conn != null) {
-                System.out.println("Connected to the database successfully!");
+        int frequencyCounter = 0;
+        Connection connection = null;
 
-                String query = "SELECT * FROM your_table WHERE type = '" + type + "' ORDER BY frequency DESC LIMIT " + topFrequency;
-                try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-                    while (rs.next()) {
-                        System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Frequency: " + rs.getInt("frequency"));
+        try {
+          // create a database connection
+          connection = DriverManager.getConnection("jdbc:sqlite:" + database);
+          Statement statement = connection.createStatement();
+          statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        //   statement.executeUpdate("drop table if exists " + type);
+        //   statement.executeUpdate("create table " + type + " (Key string, Frequency integer)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-14:18', 2)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-22:11', 1)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-08:32', 3)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-09:21', 3)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-06:14', 4)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-23:56', 2)");
+        //   statement.executeUpdate("insert into " + type + " values('Accepted-15:01', 1)");
+          ResultSet rs = statement.executeQuery("select * from " + type);
+          while(rs.next() && frequencyCounter < topFrequency)
+          {
+            // read the result set
+            System.out.println("Key: " + rs.getString("Key"));
+            System.out.println("Frequency: " + rs.getInt("Frequency"));
+            frequencyCounter++;
+          }
         }
-
-       //connect();
+        catch(SQLException e)
+        {
+          // if the error message is "out of memory",
+          // it probably means no database file is found
+          System.err.println(e.getMessage());
+        }
+        finally
+        {
+          try
+          {
+            if(connection != null)
+              connection.close();
+          }
+          catch(SQLException e)
+          {
+            // connection close failed.
+            System.err.println(e.getMessage());
+          }
+        }
+      }
     }
 
-}
