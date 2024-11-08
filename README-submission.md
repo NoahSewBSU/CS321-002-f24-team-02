@@ -29,3 +29,12 @@ Provide a reflection by each of the team member (in a separate subsection)
 # Additional Notes
 TBD   
 
+# Running Code
+
+## SSHSearchDatabase
+
+Construct class:
+./gradlew createJarSSHSearchDatabase
+
+Run .jar program:
+java -jar build/libs/SSHSearchDatabase.jar
