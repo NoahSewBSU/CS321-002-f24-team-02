@@ -36,7 +36,7 @@ public class BTree
 
 
 
-    /*Constructor */
+    /*Constructors */
     public BTree(String filename) {
         this.filename = filename;
         this.height = 0;
@@ -57,7 +57,7 @@ public class BTree
 
 
 
-    
+    /*Node Class to create a node in the BTRee */
     private class Node {
 
         private long address;
@@ -76,7 +76,7 @@ public class BTree
         }
     }
 
-    
+    /*Insert function */
     void insert(TreeObject obj) throws IOException {
         
         Node r = root;
@@ -89,6 +89,7 @@ public class BTree
         }
     }
 
+    /*Helper function for insert */
     public Node BTreeSplitRoot(Node T) {
         Node s = new Node(false, METADATA_SIZE, nextDiskAddress);
         s.isLeaf = false;
@@ -101,6 +102,7 @@ public class BTree
 
     }
 
+        /*Helper function for insert */
     public void BTreeInsertNonFull (Node x, TreeObject k) {
 
 
@@ -148,7 +150,7 @@ public class BTree
     }
 
 
-
+    /*Helper function for insert */
     public void BTreeSplitChild(Node x, int i) {
         Node y = x.children[i];
         Node z = new Node(false, METADATA_SIZE, nextDiskAddress);
@@ -220,7 +222,6 @@ public class BTree
 
     
     /*DiskWrite for BTree */
-    
     public void diskWrite(Node x) throws IOException{
 
         
