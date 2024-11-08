@@ -10,7 +10,7 @@ public class TreeObject implements Comparable<TreeObject> {
 
     private String key;
     private long count;
-    private static final int SIZE  = 64; //#bytes
+    public static final int BYTES  = 64 + Long.BYTES; 
 
     /**
      * Create a TreeObject with the given key.
@@ -79,13 +79,6 @@ public class TreeObject implements Comparable<TreeObject> {
 	public String toString() {
 		return key + " " + this.count;
 	}
-
-
-    /**
-     * Returns the size of the disk
-     * @return SIZE - the Disk's size
-     */
-    public static int getDiskSize() { return SIZE;}
     
 
     /**
