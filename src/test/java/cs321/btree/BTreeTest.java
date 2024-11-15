@@ -495,7 +495,8 @@ public class BTreeTest {
      */
     private boolean validateInserts(BTree b, String[] inputKeys) throws IOException {
 
-        //String[] bTreeKeys = b.getSortedKeyArray();
+        String[] bTreeKeys = b.getSortedKeyArray();
+
 
         //input may be unsorted
         Arrays.sort(inputKeys);
@@ -504,7 +505,7 @@ public class BTreeTest {
         ArrayList<String> inputNoDuplicates = new ArrayList<>(inputKeys.length);
 
         //Copy with excluding duplicates
-        /* 
+        
         for (int i = 0; i < inputKeys.length; i++) {
 
             if (i > 0) {
@@ -533,7 +534,7 @@ public class BTreeTest {
                 return false;
             }
         }
-        */
+        
         return true;
     }
 

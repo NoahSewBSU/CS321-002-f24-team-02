@@ -7,8 +7,9 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
 import javax.swing.tree.TreeNode;
 
 
@@ -26,7 +27,7 @@ public class BTree
 
 
 
-    private Node root = new Node(false, METADATA_SIZE, nextDiskAddress);
+    private Node root = new Node(true, METADATA_SIZE, nextDiskAddress);
     private int height;
     private int degree;
     private int size;
@@ -43,6 +44,7 @@ public class BTree
         this.degree = 2;
         this.size = 0;
         this.numOfNodes = 1;
+        this.root = new Node(true, 2, METADATA_SIZE);
     }
 
     public BTree(int degree, String filename) {
@@ -50,7 +52,7 @@ public class BTree
         this.degree = degree;
         this.size = 0;
         this.numOfNodes = 1;
-        this.root = new Node(true, 2, METADATA_SIZE);
+        this.root = new Node(true, degree, METADATA_SIZE);
     }
 
     
@@ -81,68 +83,55 @@ public class BTree
         
         Node r = root;
 
-        if(r.numOfKeys == 2 *degree -1) {
-            Node s = BTreeSplitRoot(root);
+        if(r.numOfKeys == 2 * degree - 1) {
+            Node s = BTreeSplitRoot();
             BTreeInsertNonFull(s, obj);
+            incrementNumOfNodes();
+            size++;
+
         }else {
             BTreeInsertNonFull(r, obj);
+            size++;
         }
     }
 
     /*Helper function for insert */
-    public Node BTreeSplitRoot(Node T) {
+    public Node BTreeSplitRoot() {
         Node s = new Node(false, METADATA_SIZE, nextDiskAddress);
         s.isLeaf = false;
         s.numOfKeys = 0;
         s.children[0] = root;
-
+        height++;
         root = s;
         BTreeSplitChild(s, 0);
+
         return s;
 
     }
 
         /*Helper function for insert */
     public void BTreeInsertNonFull (Node x, TreeObject k) {
-
-
-        size++;
         
         int i = x.numOfKeys - 1;
         
         if(x.isLeaf) {
-            while(i >= 0 && k.compareTo( x.keys[i]) < 0) {
+            while(i >= 0 && k.compareTo(x.keys[i]) < 0) {
                 x.keys[i + 1] = x.keys[i];
-                i = i - 1;
+                i--;
             }
             x.keys[i+1] = k;
-            x.numOfKeys = x.numOfKeys + 1;
-            try {
-            diskWrite(x);
-            }catch(IOException ie) {
-
-            }
+            x.numOfKeys = x.numOfKeys + 1;  
         }
-        
         else {
-            while(i >= 0 && k.compareTo( x.keys[i]) < 1) {
+            while(i >= 0 && k.compareTo( x.keys[i]) < 0) {
                 i = i - 1;
             }
             i = i + 1;
-            try{
-            diskRead(root.address);
-            }catch(IOException ie) {
-
-            }
-            if(x.children[i].numOfKeys == 2 * degree -1) {
+            
+            if(x.children[i].numOfKeys == 2 * degree - 1) {
                 BTreeSplitChild(x, i);
-                if(k.compareTo( x.keys[i]) < 0) {
+                if(k.compareTo( x.keys[i]) > 0) {
                     i = i + 1;
-                    try {
-                    diskWrite(x.children[i]);
-                    }catch(IOException ie) {
-
-                    }
                 }
             }
             BTreeInsertNonFull(x.children[i], k);
@@ -153,35 +142,30 @@ public class BTree
     /*Helper function for insert */
     public void BTreeSplitChild(Node x, int i) {
         Node y = x.children[i];
-        Node z = new Node(false, METADATA_SIZE, nextDiskAddress);
+        Node z = new Node(true, METADATA_SIZE, nextDiskAddress);
         z.isLeaf = y.isLeaf;
         z.numOfKeys = degree - 1;
-        for(int j = 0; j < degree - 1; j ++) {
+        for(int j = 0; j <= degree - 2; j ++) {  
             z.keys[j] = y.keys[j + degree];
         }
-
         if(!y.isLeaf) {
-            for(int j = 0; j < degree - 1; j++) {
+            for(int j = 0; j <= degree - 1; j++) {
                 z.children[j] = y.children[j + degree];
             }
         }
         y.numOfKeys = degree - 1;
-        for(int j = x.numOfKeys; j > i + degree; i--) {
+
+        for(int j = x.numOfKeys; j > i + 1; i--) {
             x.children[j + 1] = x.children[j];
         }
         x.children[i + 1] = z;
-        for(int j = x.numOfKeys; j > i; i--) {
-            x.keys[j + 1] =x.keys[j];
+
+
+        for(int j = x.numOfKeys - 1; j >= i; i--) {
+            x.keys[j + 1] = x.keys[j];
         }
         x.keys[i] = y.keys[degree -1];
         x.numOfKeys = x.numOfKeys + 1;
-        try{
-        diskWrite(y);
-        diskWrite(z);
-        diskWrite(x);
-        }catch(IOException ie) {
-
-        }
     }
 
     
@@ -191,6 +175,7 @@ public class BTree
     
     public Node diskRead(long diskAddress) throws IOException{
 
+        /* 
         if(diskAddress == 0) {
             return null;
         }
@@ -214,8 +199,9 @@ public class BTree
         Node x = new Node(leaf, 1, diskAddress);
 
 
-
-        return x;
+        */
+        //return x;
+        return null;
     }
 
 
@@ -269,23 +255,44 @@ public class BTree
 
     
 
+    private ArrayList<String> values = new ArrayList<String>();
+
+
+
+    String[] getSortedKeyArray() {
+
+        ArrayList<String> inputs = inorderTransversal(root);
+
+        String[] arr = new String[inputs.size()];
+        arr = inputs.toArray(arr);
+
+        return arr;
+
+    }
+
+
+    ArrayList<String> inorderTransversal(Node node) {
+        
+        for(int i = 0; i < node.children.length; i++) {
+            if(node.children[i] != null) {
+                inorderTransversal(node.children[i]);
+            }
+        }
+
+        for(int j = 0; j < node.numOfKeys; j++) {
+            values.add(node.keys[j].getKey());
+        }
+
+        return values;
+    }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    void incrementNumOfNodes() {
+        numOfNodes++;
+    }
 
 
     long getSize() {
@@ -306,3 +313,5 @@ public class BTree
     }
 
 }
+
+
