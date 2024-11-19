@@ -274,9 +274,9 @@ public class BTreeTest {
 
         BTree b = new BTree(2, testFilename);
 
-        //TreeObject t = b.search("1");
+        TreeObject t = b.search("1");
 
-        //assertNull(t);
+        assertNull(t);
 
     }
 
@@ -298,9 +298,9 @@ public class BTreeTest {
 
         b.insert(new TreeObject(key));
 
-        //TreeObject obj = b.search(key);
+        TreeObject obj = b.search(key);
 
-        //assertEquals(0, t.compareTo(obj));
+        assertEquals(0, t.compareTo(obj));
 
     }
 
@@ -345,9 +345,9 @@ public class BTreeTest {
 
         b.insert(new TreeObject(key));
 
-        //TreeObject obj = b.search(key);
+        TreeObject obj = b.search(key);
 
-        //assertEquals(1, obj.getCount());
+        assertEquals(1, obj.getCount());
     }
 
     /**
@@ -367,9 +367,9 @@ public class BTreeTest {
             b.insert(new TreeObject(duplicateKey));
         }
 
-        //TreeObject obj = b.search(duplicateKey);
+        TreeObject obj = b.search(duplicateKey);
 
-        //assertEquals(10, obj.getCount());
+        assertEquals(10, obj.getCount());
     }
 
     /**

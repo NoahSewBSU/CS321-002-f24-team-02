@@ -33,6 +33,7 @@ public class BTree
     private int size;
     private int numOfNodes;
     private String filename;
+    private int t;
 
 
 
@@ -67,6 +68,7 @@ public class BTree
         private boolean isLeaf;
         private TreeObject[] keys;
         private Node[] children;
+        private int t;
         
 
         public Node(boolean isLeaf, int t, long address) {
@@ -75,11 +77,55 @@ public class BTree
             this.children = new Node[2 *t];
             this.numOfKeys = 0;
             this.address = address;
+            this.t = t;
+
+        }
+
+        public Node(TreeObject[] keys, Node[] children, boolean isLeaf, int keyCount, long adrresss) {
+            this.keys = keys;
+            this.children = children;
+            this.isLeaf = isLeaf;
+            this.numOfKeys = keyCount;
+            this.address = adrresss;
+        }
+
+
+        public TreeObject search(String k) {
+            int i = 0;
+            while(i < root.numOfKeys && k.compareTo(keys[i].getKey()) > 0) {
+                i++;
+            }
+
+            if(numOfKeys == 0) {
+                return null;
+            }
+
+            if(keys[i].getKey() == k) {
+                return this.keys[i];
+            }
+            if(isLeaf == true) {
+                return null;
+            }
+
+            return children[i].search(k);
         }
     }
 
+    public TreeObject search(String k) {
+        if(this.root == null) {
+            return null;
+        }else {
+            return this.root.search(k);
+        }
+    }
+
+    
+
+
+
     /*Insert function */
-    void insert(TreeObject obj) throws IOException {
+    
+    public void insert(TreeObject obj) throws IOException {
         
         Node r = root;
 
@@ -96,6 +142,7 @@ public class BTree
     }
 
     /*Helper function for insert */
+    
     public Node BTreeSplitRoot() {
         Node s = new Node(false, METADATA_SIZE, nextDiskAddress);
         s.isLeaf = false;
@@ -104,12 +151,12 @@ public class BTree
         height++;
         root = s;
         BTreeSplitChild(s, 0);
-
         return s;
 
     }
 
         /*Helper function for insert */
+        
     public void BTreeInsertNonFull (Node x, TreeObject k) {
         
         int i = x.numOfKeys - 1;
@@ -121,17 +168,18 @@ public class BTree
             }
             x.keys[i+1] = k;
             x.numOfKeys = x.numOfKeys + 1;  
-        }
-        else {
+            //diskwrite(x)
+        }else {
             while(i >= 0 && k.compareTo( x.keys[i]) < 0) {
                 i = i - 1;
             }
             i = i + 1;
-            
+            //diskread(x.children[i])
             if(x.children[i].numOfKeys == 2 * degree - 1) {
                 BTreeSplitChild(x, i);
                 if(k.compareTo( x.keys[i]) > 0) {
                     i = i + 1;
+                    //diskread(x.children[i])
                 }
             }
             BTreeInsertNonFull(x.children[i], k);
@@ -140,8 +188,9 @@ public class BTree
 
 
     /*Helper function for insert */
+    
     public void BTreeSplitChild(Node x, int i) {
-        Node y = x.children[i];
+        Node y = x.children[i]; 
         Node z = new Node(true, METADATA_SIZE, nextDiskAddress);
         z.isLeaf = y.isLeaf;
         z.numOfKeys = degree - 1;
@@ -155,7 +204,7 @@ public class BTree
         }
         y.numOfKeys = degree - 1;
 
-        for(int j = x.numOfKeys; j > i + 1; i--) {
+        for(int j = x.numOfKeys; j >= i + 1; i--) {
             x.children[j + 1] = x.children[j];
         }
         x.children[i + 1] = z;
@@ -164,8 +213,12 @@ public class BTree
         for(int j = x.numOfKeys - 1; j >= i; i--) {
             x.keys[j + 1] = x.keys[j];
         }
-        x.keys[i] = y.keys[degree -1];
+        x.keys[i] = y.keys[degree - 1];
         x.numOfKeys = x.numOfKeys + 1;
+
+        //diskwrite(y)
+        //diskwrite(z)
+        //diskwrite(x)
     }
 
     
@@ -174,19 +227,38 @@ public class BTree
     /*Read from the disk*/
     
     public Node diskRead(long diskAddress) throws IOException{
-
-        /* 
+        /*
         if(diskAddress == 0) {
             return null;
         }
-
         file.position(diskAddress);
         buffer.clear();
-
         file.read(buffer);
         buffer.flip();
-
         int numberKeys = buffer.getInt();
+
+        //make treeobject array
+        TreeObject[] keyRead = new TreeObject[2* degree - 1];
+
+        for(int i = 0; i < numberKeys; i++) {
+            byte[] keyBytes = new byte[TreeObject.BYTES];
+            buffer.get(keyBytes, i, TreeObject.BYTES);
+            String key = new String(keyBytes, StandardCharsets.UTF_16BE).trim();
+            long count = buffer.getLong();
+            keyRead[i] = new TreeObject(key, count);
+        }
+
+        Node[] childrenRead = new Node[2* degree];
+
+        for(int i = 0; i < degree * 2; i++){
+            byte[] childrenBytes = new byte[Node.BYTES];
+            buffer.get(childrenBytes, i, Node.BYTES);
+            Node child = new Node ()
+            childrenRead[i] = new Node(false, i, diskAddress);
+        }
+
+
+
 
         byte flag = buffer.get();
         boolean leaf = false;
@@ -196,11 +268,16 @@ public class BTree
 
 
 
-        Node x = new Node(leaf, 1, diskAddress);
 
-
+        Node x = new Node();
+        x.numOfKeys = numberKeys;
+        x.isLeaf = leaf;
+        x.children = childrenRead;
+        x.keys = keyRead;
+        x.address = diskAddress;
+        
+        return x;
         */
-        //return x;
         return null;
     }
 
@@ -210,15 +287,6 @@ public class BTree
     /*DiskWrite for BTree */
     public void diskWrite(Node x) throws IOException{
 
-        
-        try {
-
-        File myFile = new File(filename);
-
-        RandomAccessFile dataFile = new RandomAccessFile(filename, "rw");
-        file = dataFile.getChannel();
-
-        
         file.position(x.address);
         buffer.clear();
 
@@ -231,6 +299,7 @@ public class BTree
             buffer.put(theKey.getKey().getBytes(StandardCharsets.UTF_8));
             buffer.putLong(theKey.getCount());
         }
+
         
         if(x.isLeaf) {
             buffer.put((byte)1);
@@ -241,24 +310,14 @@ public class BTree
             }
         }
 
-
         buffer.flip();
         file.write(buffer);
-
-        dataFile.close();
-
-        } catch (Exception e) {
-
-        }
     }
 
 
     
 
     private ArrayList<String> values = new ArrayList<String>();
-
-
-
     String[] getSortedKeyArray() {
 
         ArrayList<String> inputs = inorderTransversal(root);
@@ -269,7 +328,6 @@ public class BTree
         return arr;
 
     }
-
 
     ArrayList<String> inorderTransversal(Node node) {
         
