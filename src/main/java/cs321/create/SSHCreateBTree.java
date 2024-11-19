@@ -29,10 +29,70 @@ public class SSHCreateBTree {
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments
         // other code 
         
-        /* TODO: call the BTree constructor 
+        /* TODO: call the BTree constructor to construct empty BTree
         *  Waiting on BTree constructor to be completed */      
-        //BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
+        BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
         // scan files, logs, and insert keys based on BTree
+
+        // TODO: comb through file and add assets to the new BTree
+        /* while (!newline = null) {
+                iterate line 0;
+                if (string after space 2 == start of treeType) {
+                    record that string + }
+            insert.node();
+        } */
+
+        // TODO: Add in if-statements for what to do based on treeType
+        /* if (myargs.getTreeType() == "acceptedip") {
+                if database is yes, setup database file of fileName given
+         *      comb through fileName looking for designated data needed for that treeType
+         *      1. check each line; if line is correct, goto 2. if not, goto next line
+         *      2. find proper data from line and if database is yes, place into database given. otherwise, place into arbitrary tree (insert())
+         *      go through each newline '\n' and count white spaces; this will tell us where the data is
+         *      since all data is structured the same by ending in '\n' and using the same amount of white spaces
+         * } else if (myargs.get)
+        } */
+
+        // TODO: Types needed
+        /*  
+            accepted/failed/invalid/reverseaddress/user
+            ip/timestamp
+
+            when getting tree-type, consider saving first and second parts seperately
+
+            Accepted IPs (accepted-ip: Accepted log entry along with its IP address)
+            Accepted timestamps (accepted-timestamp: Accepted log entry along with its timestamp)
+            Failed IPs (failed-ip: Failed log entry along with its IP address)
+            Failed timestamps (failed-timestamp: Failed log entry along with its timestamp)
+            Invalid IPs (invalid-ip: Invalid log entry along with its IP address)
+            Invalid timestamps (invalid-timestamp: Invalid log entry along with its timestamp)
+            Reverse or Address IPs (reverseaddress-ip: Reverse or Address log entry along with its IP address)
+            Reverse or Address timestamps (reverseaddress-timestamp: Reverse or Address log entry along with its timestamp)
+            User's name and their IPs (user-ip: User name and IP address from all log entries)
+         */
+
+         /* TODO: Create function to pull key words from file 
+          *     
+            String type1Options = {"accepted","failed","invalid","reverseaddress","user"};
+            String type2Options = {"ip","timestamp"};
+            String type1Selected;
+            String type2Selected;
+          
+            for (arg : args) {
+                if (arg.startsWith("--type=")) {
+                    //copy string until '-'
+                    //compare to type1Options {
+                        //assign type1Selection to matching option
+                        //}
+                    //copy string after '-' until null
+                    //compare to type2Options {
+                        //assign type2Selection to matching option
+                        //}
+                } 
+            }
+         */
+
+
 
         
 	}
