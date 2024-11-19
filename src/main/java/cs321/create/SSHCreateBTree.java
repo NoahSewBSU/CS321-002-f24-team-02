@@ -29,10 +29,15 @@ public class SSHCreateBTree {
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments
         // other code 
         
-        /* TODO: call the BTree constructor 
+        /* TODO: call the BTree constructor to construct empty BTree
         *  Waiting on BTree constructor to be completed */      
         //BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
         // scan files, logs, and insert keys based on BTree
+
+        // TODO: comb through file and add assets to the new BTree
+        /* while (!newline = null) {
+            insert.node();
+        } */
         
 	}
 
