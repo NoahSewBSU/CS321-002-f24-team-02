@@ -9,6 +9,7 @@ package cs321.create;
 public class SSHCreateBTreeArguments
 {
 	/* TODO: Complete this class */
+    /* Class to save the arguments as an object */
 
     private final boolean useCache;
     private final int degree;
@@ -36,6 +37,27 @@ public class SSHCreateBTreeArguments
         this.treeType = treeType;
         this.cacheSize = cacheSize;
         this.debugLevel = debugLevel;
+    }
+
+    /* Getters */
+    public boolean getCache(){
+        return useCache;
+    }
+    public int getDegree(){
+        return degree;
+    }
+    public String getFileName(){
+        return SSHFileName;
+    }
+    public String getTreeType(){
+        return treeType;
+    }
+
+    public int getCacheSize(){
+        return cacheSize;
+    } 
+    public int getDebugLevel(){
+        return debugLevel;
     }
 
 

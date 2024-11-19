@@ -62,6 +62,7 @@ public class SSHSearchDatabase
         //   statement.executeUpdate("insert into " + type + " values('Accepted-06:14', 4)");
         //   statement.executeUpdate("insert into " + type + " values('Accepted-23:56', 2)");
         //   statement.executeUpdate("insert into " + type + " values('Accepted-15:01', 1)");
+        
           ResultSet rs = statement.executeQuery("select * from " + type);
           while(rs.next() && frequencyCounter < topFrequency)
           {
