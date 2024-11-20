@@ -209,6 +209,10 @@ public class BTree
                 x.keys[i].incCount();
             }else {
                 i = i + 1;
+
+                
+
+                }
                 //diskread(x.children[i])
                 if(x.children[i].numOfKeys == 2 * degree - 1) {
                     BTreeSplitChild(x, i);
