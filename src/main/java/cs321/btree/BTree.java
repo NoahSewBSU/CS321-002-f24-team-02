@@ -25,6 +25,7 @@ public class BTree
 
     private long rootAddress = METADATA_SIZE;
 
+    private ArrayList<String> values = new ArrayList<String>();
 
 
     private Node root = new Node(true, METADATA_SIZE, nextDiskAddress);
@@ -89,15 +90,32 @@ public class BTree
             this.address = adrresss;
         }
 
-
-        public TreeObject search(String k) {
+        public ArrayList<String> inorderTransversal() {
+            
             int i = 0;
-            while(i < root.numOfKeys && k.compareTo(keys[i].getKey()) > 0) {
-                i++;
+            for(i = 0; i < numOfKeys; i++) {
+                if(isLeaf == false) {
+                    children[i].inorderTransversal();
+                }
+                values.add(keys[i].getKey());
             }
 
+            if(isLeaf == false) {
+                children[i].inorderTransversal();
+            }
+    
+            return values;
+        }
+
+
+        public TreeObject search(String k) {
             if(numOfKeys == 0) {
                 return null;
+            }
+            
+            int i = 0;
+            while(i < numOfKeys && k.compareTo(keys[i].getKey()) > 0) {
+                i++;
             }
 
             if(keys[i].getKey() == k) {
@@ -109,6 +127,15 @@ public class BTree
 
             return children[i].search(k);
         }
+    }
+
+
+    public ArrayList<String> inorderTransversal() {
+        if(this.root != null) {
+            this.root.inorderTransversal();
+        }
+
+        return values;
     }
 
     public TreeObject search(String k) {
@@ -126,6 +153,13 @@ public class BTree
     /*Insert function */
     
     public void insert(TreeObject obj) throws IOException {
+
+        if(search(obj.getKey()) != null) {
+            search(obj.getKey()).incCount();
+            return;
+        }
+        
+        
         
         Node r = root;
 
@@ -196,6 +230,7 @@ public class BTree
         z.numOfKeys = degree - 1;
         for(int j = 0; j <= degree - 2; j ++) {  
             z.keys[j] = y.keys[j + degree];
+            y.keys[j + degree] = null;
         }
         if(!y.isLeaf) {
             for(int j = 0; j <= degree - 1; j++) {
@@ -204,16 +239,17 @@ public class BTree
         }
         y.numOfKeys = degree - 1;
 
-        for(int j = x.numOfKeys; j >= i + 1; i--) {
+        for(int j = x.numOfKeys; j >= i + 1; j--) {
             x.children[j + 1] = x.children[j];
         }
         x.children[i + 1] = z;
 
 
-        for(int j = x.numOfKeys - 1; j >= i; i--) {
+        for(int j = x.numOfKeys - 1; j >= i; j--) {
             x.keys[j + 1] = x.keys[j];
         }
         x.keys[i] = y.keys[degree - 1];
+        y.keys[degree - 1] = null;
         x.numOfKeys = x.numOfKeys + 1;
 
         //diskwrite(y)
@@ -315,12 +351,9 @@ public class BTree
     }
 
 
-    
+        String[] getSortedKeyArray() {
 
-    private ArrayList<String> values = new ArrayList<String>();
-    String[] getSortedKeyArray() {
-
-        ArrayList<String> inputs = inorderTransversal(root);
+        ArrayList<String> inputs = inorderTransversal();
 
         String[] arr = new String[inputs.size()];
         arr = inputs.toArray(arr);
@@ -329,20 +362,9 @@ public class BTree
 
     }
 
-    ArrayList<String> inorderTransversal(Node node) {
-        
-        for(int i = 0; i < node.children.length; i++) {
-            if(node.children[i] != null) {
-                inorderTransversal(node.children[i]);
-            }
-        }
+    
 
-        for(int j = 0; j < node.numOfKeys; j++) {
-            values.add(node.keys[j].getKey());
-        }
-
-        return values;
-    }
+    
 
 
 

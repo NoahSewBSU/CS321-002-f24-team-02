@@ -325,9 +325,9 @@ public class BTreeTest {
         b.insert(new TreeObject("H"));
         b.insert(new TreeObject("L"));
 
-        //TreeObject obj = b.search("A");
+        TreeObject obj = b.search("A");
 
-        //assertEquals("A", obj.getKey());
+        assertEquals("A", obj.getKey());
     }
 
     /**
@@ -411,11 +411,11 @@ public class BTreeTest {
         //by inserting a duplicate into a non leaf node, another branch is tested.
         b.insert(new TreeObject(input[8])); //H
 
-        //TreeObject obj = b.search("H");
+        TreeObject obj = b.search("H");
 
-        //assertEquals(2, obj.getCount());
+        assertEquals(2, obj.getCount());
 
-        //assertTrue(validateInserts(b, input));
+        assertTrue(validateInserts(b, input));
     }
 
 
@@ -439,11 +439,11 @@ public class BTreeTest {
             b.insert(new TreeObject(l));
         }
 
-        //TreeObject obj = b.search("H");
+        TreeObject obj = b.search("H");
 
-        //assertEquals(2, obj.getCount());
+        assertEquals(2, obj.getCount());
 
-        //assertTrue(validateInserts(b, input));
+        assertTrue(validateInserts(b, input));
     }
 
 
