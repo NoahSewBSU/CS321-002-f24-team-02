@@ -217,7 +217,7 @@ public class BTree
                  * node being inserted isn't present in the full child being split up
                  */
 
-                }
+                
                 //diskread(x.children[i])
                 if(x.children[i].numOfKeys == 2 * degree - 1) {
                     BTreeSplitChild(x, i);
