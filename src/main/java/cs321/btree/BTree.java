@@ -212,6 +212,11 @@ public class BTree
 
                 
 
+                /*problem is that node splits and moves middle to the top node but doesn't check if the node
+                 * being inserted is the same as the one being moved up to parent node. Need to only split a node if the 
+                 * node being inserted isn't present in the full child being split up
+                 */
+
                 }
                 //diskread(x.children[i])
                 if(x.children[i].numOfKeys == 2 * degree - 1) {
