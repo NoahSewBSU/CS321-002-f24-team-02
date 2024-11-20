@@ -154,32 +154,23 @@ public class BTree
     
     public void insert(TreeObject obj) throws IOException {
 
-        /* 
-        if(search(obj.getKey()) != null) {
-            search(obj.getKey()).incCount();
-            return;
-        }
-        */
-        
-        
         Node r = root;
 
         if(r.numOfKeys == 2 * degree - 1) {
             Node s = BTreeSplitRoot();
             BTreeInsertNonFull(s, obj);
             incrementNumOfNodes();
-            size++;
-
+            incrementNumOfNodes();
+            
         }else {
             BTreeInsertNonFull(r, obj);
-            size++;
         }
     }
 
     /*Helper function for insert */
     
     public Node BTreeSplitRoot() {
-        Node s = new Node(false, METADATA_SIZE, nextDiskAddress);
+        Node s = new Node(false, degree, nextDiskAddress);
         s.isLeaf = false;
         s.numOfKeys = 0;
         s.children[0] = root;
@@ -201,23 +192,34 @@ public class BTree
                 x.keys[i + 1] = x.keys[i];
                 i--;
             }
-            x.keys[i+1] = k;
-            x.numOfKeys = x.numOfKeys + 1;  
+            if(i >= 0 && k.compareTo(x.keys[i]) == 0) {
+                x.keys[i].incCount();
+            }else {
+                x.keys[i+1] = k;
+                x.numOfKeys = x.numOfKeys + 1;
+                size++;
+            }
+                
             //diskwrite(x)
         }else {
             while(i >= 0 && k.compareTo( x.keys[i]) < 0) {
                 i = i - 1;
             }
-            i = i + 1;
-            //diskread(x.children[i])
-            if(x.children[i].numOfKeys == 2 * degree - 1) {
-                BTreeSplitChild(x, i);
-                if(k.compareTo( x.keys[i]) > 0) {
-                    i = i + 1;
-                    //diskread(x.children[i])
+            if(i >= 0 && k.compareTo(x.keys[i]) == 0) {
+                x.keys[i].incCount();
+            }else {
+                i = i + 1;
+                //diskread(x.children[i])
+                if(x.children[i].numOfKeys == 2 * degree - 1) {
+                    BTreeSplitChild(x, i);
+                    if(k.compareTo( x.keys[i]) > 0) {
+                        i = i + 1;
+                        //diskread(x.children[i])
+                    }
                 }
+                BTreeInsertNonFull(x.children[i], k);    
             }
-            BTreeInsertNonFull(x.children[i], k);
+            
         }
     }
 
@@ -226,7 +228,7 @@ public class BTree
     
     public void BTreeSplitChild(Node x, int i) {
         Node y = x.children[i]; 
-        Node z = new Node(true, METADATA_SIZE, nextDiskAddress);
+        Node z = new Node(true, degree, nextDiskAddress);
         z.isLeaf = y.isLeaf;
         z.numOfKeys = degree - 1;
         for(int j = 0; j <= degree - 2; j ++) {  
