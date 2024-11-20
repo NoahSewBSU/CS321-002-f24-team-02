@@ -154,11 +154,12 @@ public class BTree
     
     public void insert(TreeObject obj) throws IOException {
 
+        /* 
         if(search(obj.getKey()) != null) {
             search(obj.getKey()).incCount();
             return;
         }
-        
+        */
         
         
         Node r = root;
