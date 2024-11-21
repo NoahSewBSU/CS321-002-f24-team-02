@@ -458,13 +458,12 @@ public class BTreeTest {
 	@SuppressWarnings("unused")
     private boolean validateSearchTreeProperty(BTree b) throws IOException {
 
-        //String[] keys = b.getSortedKeyArray();
+        String[] keys = b.getSortedKeyArray();
 
         /*if there are no keys, the tree is valid
             Beware, if keys have indeed been inserted but getKeysInOrder is not,
             this method will return true
         */
-        /* 
         if (keys == null | keys.length == 0) {
             return true;
         }
@@ -476,7 +475,6 @@ public class BTreeTest {
                 return false;
             }
         }
-            */
         return true;
     }
 
@@ -497,7 +495,6 @@ public class BTreeTest {
 
         String[] bTreeKeys = b.getSortedKeyArray();
 
-
         //input may be unsorted
         Arrays.sort(inputKeys);
 
@@ -505,7 +502,6 @@ public class BTreeTest {
         ArrayList<String> inputNoDuplicates = new ArrayList<>(inputKeys.length);
 
         //Copy with excluding duplicates
-        
         for (int i = 0; i < inputKeys.length; i++) {
 
             if (i > 0) {
@@ -534,7 +530,7 @@ public class BTreeTest {
                 return false;
             }
         }
-        
+
         return true;
     }
 

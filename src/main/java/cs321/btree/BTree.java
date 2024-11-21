@@ -112,15 +112,16 @@ public class BTree
             if(numOfKeys == 0) {
                 return null;
             }
-            
             int i = 0;
             while(i < numOfKeys && k.compareTo(keys[i].getKey()) > 0) {
                 i++;
             }
 
-            if(keys[i].getKey() == k) {
-                return this.keys[i];
+            if(keys[i] != null && keys[i].getKey().compareTo(k) ==0) {
+                return keys[i]; 
             }
+            
+
             if(isLeaf == true) {
                 return null;
             }
