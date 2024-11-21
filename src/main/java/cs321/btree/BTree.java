@@ -207,6 +207,7 @@ public class BTree
             }
             if(i >= 0 && k.compareTo(x.keys[i]) == 0) {
                 x.keys[i].incCount();
+                return;
             }else {
                 i = i + 1;
 
@@ -218,8 +219,19 @@ public class BTree
                  */
 
                 
+                
                 //diskread(x.children[i])
                 if(x.children[i].numOfKeys == 2 * degree - 1) {
+                    
+                    for(int h = 0; h < x.children[i].numOfKeys; h++) {
+                        
+                        if(x.children[i].keys[h].compareTo(k) == 0) {
+                            x.children[i].keys[h].incCount();
+                            return;
+                        }   
+                    }
+                        
+
                     BTreeSplitChild(x, i);
                     if(k.compareTo( x.keys[i]) > 0) {
                         i = i + 1;
@@ -237,6 +249,7 @@ public class BTree
     
     public void BTreeSplitChild(Node x, int i) {
         Node y = x.children[i]; 
+
         Node z = new Node(true, degree, nextDiskAddress);
         z.isLeaf = y.isLeaf;
         z.numOfKeys = degree - 1;
