@@ -4,6 +4,8 @@ import cs321.btree.BTree;
 import cs321.btree.BTreeException;
 import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
+import java.io.File;
+import java.util.Scanner;
 
 
 
@@ -26,75 +28,75 @@ public class SSHCreateBTree {
             return;
         }
 		System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
-        SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments
-        // other code 
+        SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments 
         
-        /* TODO: call the BTree constructor to construct empty BTree
-        *  Waiting on BTree constructor to be completed */      
-        BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
+        // change this later...   
+        BTree newTree = new BTree(2,"test_doc.txt");
         // scan files, logs, and insert keys based on BTree
 
-        // TODO: comb through file and add assets to the new BTree
-        /* while (!newline = null) {
-                iterate line 0;
-                if (string after space 2 == start of treeType) {
-                    record that string + }
-            insert.node();
-        } */
+        // try-catch is a requirement to go through files in java
+        try {
 
-        // TODO: Add in if-statements for what to do based on treeType
-        /* if (myargs.getTreeType() == "acceptedip") {
-                if database is yes, setup database file of fileName given
-         *      comb through fileName looking for designated data needed for that treeType
-         *      1. check each line; if line is correct, goto 2. if not, goto next line
-         *      2. find proper data from line and if database is yes, place into database given. otherwise, place into arbitrary tree (insert())
-         *      go through each newline '\n' and count white spaces; this will tell us where the data is
-         *      since all data is structured the same by ending in '\n' and using the same amount of white spaces
-         * } else if (myargs.get)
-        } */
+            Scanner input = new Scanner("test_doc.txt"); // choose file to view
 
-        // TODO: Types needed
-        /*  
-            accepted/failed/invalid/reverseaddress/user
-            ip/timestamp
+            File file = new File(input.nextLine()); // set file as chosen file
 
-            when getting tree-type, consider saving first and second parts seperately
+            input = new Scanner(file); 
 
-            Accepted IPs (accepted-ip: Accepted log entry along with its IP address)
-            Accepted timestamps (accepted-timestamp: Accepted log entry along with its timestamp)
-            Failed IPs (failed-ip: Failed log entry along with its IP address)
-            Failed timestamps (failed-timestamp: Failed log entry along with its timestamp)
-            Invalid IPs (invalid-ip: Invalid log entry along with its IP address)
-            Invalid timestamps (invalid-timestamp: Invalid log entry along with its timestamp)
-            Reverse or Address IPs (reverseaddress-ip: Reverse or Address log entry along with its IP address)
-            Reverse or Address timestamps (reverseaddress-timestamp: Reverse or Address log entry along with its timestamp)
-            User's name and their IPs (user-ip: User name and IP address from all log entries)
-         */
+            String fullType = myArgs.getTreeType(); // init type of tree
+            String typeParts[] = fullType.split("-"); // parse tree type into 2 parts
 
-         /* TODO: Create function to pull key words from file 
-          *     
-            String type1Options = {"accepted","failed","invalid","reverseaddress","user"};
-            String type2Options = {"ip","timestamp"};
-            String type1Selected;
-            String type2Selected;
-          
-            for (arg : args) {
-                if (arg.startsWith("--type=")) {
-                    //copy string until '-'
-                    //compare to type1Options {
-                        //assign type1Selection to matching option
-                        //}
-                    //copy string after '-' until null
-                    //compare to type2Options {
-                        //assign type2Selection to matching option
-                        //}
-                } 
+            // go through the file until no more lines
+            while (input.hasNextLine()) {
+                String line = input.nextLine();
+                String[] arr = line.split(" ");
+
+                // check for "userip" case
+                if (typeParts[0].compareTo("user") == 0) {
+                    newTree.insert(new TreeObject(arr[3] + " " + arr[4]));
+                }
+
+                // check for all other cases
+                if (typeParts[0].compareTo(arr[2]) == 0) {
+                    switch(typeParts[0]){
+                        case "accepted":
+                            if(typeParts[1] == "ip"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                            } else if(typeParts[1] == "timestamp"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                            }
+                            break;
+                        case "failed":
+                            if(typeParts[1] == "ip"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                            } else if(typeParts[1] == "timestamp"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                            }
+                        case "reverse":
+                            if(typeParts[1] == "ip"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                            } else if(typeParts[1] == "timestamp"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                            }
+                        case "invalid":
+                            if(typeParts[1] == "ip"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                            } else if(typeParts[1] == "timestamp"){
+                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                            }
+                        default:
+                            break;
+                        
+
+                    }
+                }
             }
-         */
+            input.close();
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-
-        
 	}
 
     /**
@@ -127,7 +129,7 @@ public class SSHCreateBTree {
                 SSHFileName = arg.substring("--sshFileName".length());
             } else if (arg.startsWith("--type=")) {
                 treeType = arg.substring("--type=".length());
-                treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
+                //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
             } else if (arg.startsWith("--cache-size=")) {
                 cacheSize = Integer.parseInt(arg.substring("--cache-size=".length())); // Run an if statement after useCache, and then see if there is a value for this
             } else if (arg.startsWith("--database=")) {
