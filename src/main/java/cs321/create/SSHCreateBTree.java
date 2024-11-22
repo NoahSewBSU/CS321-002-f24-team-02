@@ -115,10 +115,6 @@ public class SSHCreateBTree {
         int debugLevel = 0; // Optional (0 = optimal degree)
         boolean database;
 
-       
-        /* Create object from arguments and return */
-        /* Make getters based on args */
-
         /* Parse arguments here and assign them */
         for (String arg : args){
             if (arg.startsWith("--cache=")) {
