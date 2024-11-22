@@ -148,9 +148,6 @@ public class BTree
     }
 
     
-
-
-
     /*Insert function */
     
     public void insert(TreeObject obj) throws IOException {
@@ -212,15 +209,6 @@ public class BTree
             }else {
                 i = i + 1;
 
-                
-
-                /*problem is that node splits and moves middle to the top node but doesn't check if the node
-                 * being inserted is the same as the one being moved up to parent node. Need to only split a node if the 
-                 * node being inserted isn't present in the full child being split up
-                 */
-
-                
-                
                 //diskread(x.children[i])
                 if(x.children[i].numOfKeys == 2 * degree - 1) {
                     
@@ -232,7 +220,6 @@ public class BTree
                         }   
                     }
                         
-
                     BTreeSplitChild(x, i);
                     if(k.compareTo( x.keys[i]) > 0) {
                         i = i + 1;
@@ -289,7 +276,7 @@ public class BTree
     /*Read from the disk*/
     
     public Node diskRead(long diskAddress) throws IOException{
-        /*
+        
         if(diskAddress == 0) {
             return null;
         }
@@ -313,9 +300,9 @@ public class BTree
         Node[] childrenRead = new Node[2* degree];
 
         for(int i = 0; i < degree * 2; i++){
-            byte[] childrenBytes = new byte[Node.BYTES];
-            buffer.get(childrenBytes, i, Node.BYTES);
-            Node child = new Node ()
+            //byte[] childrenBytes = new byte[];
+            //buffer.get(childrenBytes, i, ;
+            Node child = new Node(false, i, diskAddress);
             childrenRead[i] = new Node(false, i, diskAddress);
         }
 
@@ -331,15 +318,13 @@ public class BTree
 
 
 
-        Node x = new Node();
+        Node x = new Node(leaf, flag, diskAddress);
         x.numOfKeys = numberKeys;
         x.isLeaf = leaf;
         x.children = childrenRead;
         x.keys = keyRead;
         x.address = diskAddress;
         
-        return x;
-        */
         return null;
     }
 
