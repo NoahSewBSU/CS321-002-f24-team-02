@@ -9,29 +9,23 @@
 # Sprint 1 (October 25th, Friday 2024 - November 8th, Friday 2024)
 1. Closes #8 commit f2f6a4099cc603d9cad058a7549dc22bedd81049 `(Noah Seward)(Trevor Dundy)(Ryker Waters)`
 2. Closes #9 NA `(Noah Seward)(Trevor Dundy)(Ryker Waters)`
-3. Closes # 5 0f12fe9e9cd5183be1e55ac38c0d7fb3bc9d7580 `(Trevor Dundy)`
-4. Closes #7 0f12fe9e9cd5183be1e55ac38c0d7fb3bc9d `(Noah Seward)(Trevor Dundy)`
-5. Closes #6 42c7015c3d5b6bbb84ccb35fbd7fc3a03f43f547 `(Noah Seward)`
-6. Closes #21 abeb6bc4338cf1c18e3bf8c6b00d8c14736555bb `(Noah Seward)(Trevor Dundy)(Ryker Waters)`
+3. Closes # 5 commmit 0f12fe9e9cd5183be1e55ac38c0d7fb3bc9d7580 `(Trevor Dundy)`
+4. Closes #7 commit 0f12fe9e9cd5183be1e55ac38c0d7fb3bc9d `(Noah Seward)(Trevor Dundy)`
+5. Closes #6 commit 42c7015c3d5b6bbb84ccb35fbd7fc3a03f43f547 `(Noah Seward)`
+6. Closes #21 commit abeb6bc4338cf1c18e3bf8c6b00d8c14736555bb `(Noah Seward)(Trevor Dundy)(Ryker Waters)`
 
 
 
+# Sprint 2 (November 8th, Friday 2024 - November 23th, Friday 2024)
+8. Closes #23 commmit f8876fc5fc0190bc86729fc6c1ec25360cace422 `(Noah Sweard)(Trevor Dundas)(Ryker Waters)`
+9. Closes #22 commit e3c346d14f38418a1fe3aa776ae1ccfd87566413 `(Trevor Dundas)`
+10. Closed #12 commit e3c346d14f38418a1fe3aa776ae1ccfd87566413 `(Trevor Dundas)`
+11. Closed #13 commit e3c346d14f38418a1fe3aa776ae1ccfd87566413 `(Trevor Dundas)`
+12. Closed #11 NA `(Trevor Dundas)(Noah Seward)(Ryker Waters)`
+13. Closed #26 commit dec6ae46f4248391d6becd757cdee40f798aaa0e `(Ryker Waters)`
 
 
 
-
-# Sprint 2 (November 21st, Sunday 2023 - November 27th, Saturday 2023)
-11. Closes #3 commit b27bd21c3a7e1bf95297ffc12dd8f257f37616a9 `(studentB)`
-12. Closes #10 commit b2ad17d9633bd6f9613a3ac62545ae97e4909797 `(studentB)`
-13. Closes # N/A commit af8aadf0c64c81cd5858f4b3f108b2de158528a4 `(studentB)`
-14. Closes #20 commit 43ca9ba336f5071b2b68a18aa85f20ecf8dfaa78 `(studentB)`
-15. Closes #22 commit 9b40500c3cb0baa1e7c92e6edd9f2ee4f2bfe63a `(studentA)`
-16. Closes #22 part II commit 068e3eba0422eb1d042426c38c6f4d444f0fd105 `(studentA)`
-17. Closes #24 commit 12adbd5f688f06c6c102c1c3f3d174fb8f3a41c6 `(studentB)`
-18. Closes #29 commit 1fd905627d57841ebd56bc2b091058cad0f2e7fa `(studentC)`
-19. Closes #31 commit dec5d9cc4aa7f7b2cd60dbb45a426aed37b76a3c `(studentC)`
-20. Closes #32 commit bc66c581426a75cdb2ca13a66908c16802a82e4f `(studentC)`
-21. Closes #33 commit 20b023b5d87d80da7b3276fc299f09dcc5b61e65 `(studentA)`
 # Sprint 3 (November 28th, Sunday 2023 - December 4th, Saturday 2023)
 22. Closes #10 commit 3ed6efff8881208b7eef2788f5fe7675698aef9b `(studentB)`
 23. Closes #37 commit ae16187de370172386a2f77332e38a45d49b40e3 `(studentB)`
