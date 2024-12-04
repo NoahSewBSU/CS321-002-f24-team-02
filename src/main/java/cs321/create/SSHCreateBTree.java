@@ -12,7 +12,7 @@ import java.util.Scanner;
 /**
  * The driver class for building a BTree representation of an SSH Log file.
  *
- * @author 
+ * @author Noah Seward
  */
 public class SSHCreateBTree {
     /**
@@ -30,8 +30,11 @@ public class SSHCreateBTree {
 		//System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments 
         
+        BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
+
+        /* TESTER */
         // change this later...   
-        BTree newTree = new BTree(2,"test_doc.txt");
+        // BTree newTree = new BTree(2,"test_doc.txt");
         // scan files, logs, and insert keys based on BTree
 
         // try-catch is a requirement to go through files in java
