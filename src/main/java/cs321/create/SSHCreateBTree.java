@@ -171,9 +171,9 @@ public class SSHCreateBTree {
                 System.out.println("BTree saved to databse successfully.");
 
             }
+        } catch (SQLException e) {
+            System.out.println("Error saving to database: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error saving to database: " + e.getMessage());
     }
 
 	/** 
