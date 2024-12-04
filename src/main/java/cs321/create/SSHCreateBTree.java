@@ -27,7 +27,7 @@ public class SSHCreateBTree {
             System.out.println("\t--database=<yes/no> [--debug=<0|1>]\n");
             return;
         }
-		System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
+		//System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments 
         
         // change this later...   
@@ -122,7 +122,7 @@ public class SSHCreateBTree {
             } else if (arg.startsWith("--degree=")) {
                 degree = Integer.parseInt(arg.substring("--degree=".length()));
             } else if (arg.startsWith("--sshFileName=")){
-                SSHFileName = arg.substring("--sshFileName".length());
+                SSHFileName = arg.substring("--sshFileName=".length());
             } else if (arg.startsWith("--type=")) {
                 treeType = arg.substring("--type=".length());
                 //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
@@ -140,7 +140,7 @@ public class SSHCreateBTree {
         }
         
         //return new SSHCreateBTreeArguments(/* input previously parsed variables */); // Have it return object with organized arguments
-        return new SSHCreateBTreeArguments(useCache, degree, SSHFileName, treeType, cacheSize, debugLevel); // missing database <yes/no>
+        return new SSHCreateBTreeArguments(useCache, degree, SSHFileName, treeType, cacheSize, debugLevel, database); // missing database <yes/no>
     }
 
 	/** 
