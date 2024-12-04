@@ -4,7 +4,10 @@ import cs321.btree.BTree;
 import cs321.btree.BTreeException;
 import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
+
+
 import java.io.File;
+import java.sql.*;
 import java.util.Scanner;
 
 
@@ -30,7 +33,7 @@ public class SSHCreateBTree {
 		//System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments 
         
-        BTree newTree = new BTree(myArgs.getDegree(), myArgs.getFileName());
+        BTree btree = new BTree(myArgs.getDegree(), myArgs.getFileName());
 
         /* TESTER */
         // change this later...   
@@ -38,13 +41,7 @@ public class SSHCreateBTree {
         // scan files, logs, and insert keys based on BTree
 
         // try-catch is a requirement to go through files in java
-        try {
-
-            Scanner input = new Scanner("test_doc.txt"); // choose file to view
-
-            File file = new File(input.nextLine()); // set file as chosen file
-
-            input = new Scanner(file); 
+        try (Scanner input = new Scanner(new File(myArgs.getFileName()))){
 
             String fullType = myArgs.getTreeType(); // init type of tree
             String typeParts[] = fullType.split("-"); // parse tree type into 2 parts
@@ -55,37 +52,37 @@ public class SSHCreateBTree {
                 String[] arr = line.split(" ");
 
                 // check for "userip" case
-                if (typeParts[0].compareTo("user") == 0) {
-                    newTree.insert(new TreeObject(arr[3] + " " + arr[4]));
+                if (typeParts[0].equals("user")) {
+                    btree.insert(new TreeObject(arr[3] + " " + arr[4]));
                 }
 
                 // check for all other cases
-                if (typeParts[0].compareTo(arr[2]) == 0) {
+                else if (typeParts[0].equals(arr[2])) {
                     switch(typeParts[0]){
                         case "accepted":
                             if(typeParts[1] == "ip"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
                             break;
                         case "failed":
                             if(typeParts[1] == "ip"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
                         case "reverse":
                             if(typeParts[1] == "ip"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
                         case "invalid":
                             if(typeParts[1] == "ip"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[4]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
-                                newTree.insert(new TreeObject(arr[2] + " " + arr[1]));
+                                btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
                         default:
                             break;
@@ -99,6 +96,8 @@ public class SSHCreateBTree {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        /* Add code here to save to database */
 
 	}
 
@@ -144,6 +143,37 @@ public class SSHCreateBTree {
         
         //return new SSHCreateBTreeArguments(/* input previously parsed variables */); // Have it return object with organized arguments
         return new SSHCreateBTreeArguments(useCache, degree, SSHFileName, treeType, cacheSize, debugLevel, database); // missing database <yes/no>
+    }
+
+    /* Method for adding to database */
+    private static void saveBTreeToDatabase(BTree btree) {
+        String url = "jdbc:sqlite:btree.db";
+
+        try (Connection conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                System.out.println("Connected to the database.");
+
+                // Create the BTree table
+                String createTableSQL = "CREATE TABLE IF NOT EXISTS BTree (key TEXT PRIMARY KEY)";
+                try(Statement stmt = conn.createStatement()) {
+                    stmt.execute(createTableSQL);
+                }
+
+                // Insert BTree keys
+                for (TreeObject obj : btree.getKeys()) {
+                    String insertSQL = "INSERT OR IGNORE INTO BTree (key) VALUES (?)";
+                    try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                        pstmt.setString(1, obj.toString());
+                        pstmt.executeUpdate();
+                    }
+                }
+
+                System.out.println("BTree saved to databse successfully.");
+
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error saving to database: " + e.getMessage());
     }
 
 	/** 
