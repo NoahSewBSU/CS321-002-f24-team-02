@@ -160,10 +160,13 @@ public class SSHCreateBTree {
                 }
 
                 // Insert BTree keys
-                for (TreeObject obj : btree.getKeys()) {
+
+                String[] sortedKeys = btree.getSortedKeyArray();
+
+                for (String key : sortedKeys) {
                     String insertSQL = "INSERT OR IGNORE INTO BTree (key) VALUES (?)";
                     try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-                        pstmt.setString(1, obj.toString());
+                        pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
                     }
                 }

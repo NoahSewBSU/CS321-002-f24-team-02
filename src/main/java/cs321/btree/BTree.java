@@ -347,7 +347,7 @@ public class BTree
     }
 
     /*Method used to get the elements inside of the BTreeand then returns them as an array of strings */
-    String[] getSortedKeyArray() {
+    public String[] getSortedKeyArray() {
 
         ArrayList<String> inputs = inorderTransversal();
 
