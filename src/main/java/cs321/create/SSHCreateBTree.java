@@ -113,7 +113,7 @@ public class SSHCreateBTree {
         String treeType = null;
         int cacheSize = 100; // Optional (100 - 1000) // dependent on useCache
         int debugLevel = 0; // Optional (0 = optimal degree)
-        boolean database;
+        boolean database = false;
 
         /* Parse arguments here and assign them */
         for (String arg : args){

@@ -20,7 +20,7 @@ public class SSHCreateBTreeTest
         args[2] = "fileNameGbk.gbk";
         args[3] = "13";
 
-        expectedConfiguration = new SSHCreateBTreeArguments(false, 20, "fileNameGbk.gbk", "13", 0, 0);
+        //expectedConfiguration = new SSHCreateBTreeArguments(false, 20, "fileNameGbk.gbk", "13", 0, 0);
 //        actualConfiguration = SSHCreateBTree.parseArguments(args);
 //        assertEquals(expectedConfiguration, actualConfiguration);
     }
