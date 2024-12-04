@@ -39,7 +39,7 @@ public class BTree
 
 
 
-    /*Constructors */
+    /*Constructors for BTree*/
     public BTree(String filename) {
         this.filename = filename;
         this.height = 0;
@@ -72,6 +72,7 @@ public class BTree
         private int t;
         
 
+        /*Constructor for a Node in BTree */
         public Node(boolean isLeaf, int t, long address) {
             this.isLeaf = isLeaf;
             this.keys = new TreeObject[2*t - 1];
@@ -81,7 +82,7 @@ public class BTree
             this.t = t;
 
         }
-
+        /*Constructor for a node in BTree */
         public Node(TreeObject[] keys, Node[] children, boolean isLeaf, int keyCount, long adrresss) {
             this.keys = keys;
             this.children = children;
@@ -90,6 +91,7 @@ public class BTree
             this.address = adrresss;
         }
 
+        /*Traverses through the btree and adds the keys inside it into an arraylist */
         public ArrayList<String> inorderTransversal() {
             
             int i = 0;
@@ -107,7 +109,7 @@ public class BTree
             return values;
         }
 
-
+        /*Searches trhough the Btree and checks if the given string is inside of the BTree */
         public TreeObject search(String k) {
             if(numOfKeys == 0) {
                 return null;
@@ -130,7 +132,7 @@ public class BTree
         }
     }
 
-
+    /*Calls the inorder transversal method if the root it not null */
     public ArrayList<String> inorderTransversal() {
         if(this.root != null) {
             this.root.inorderTransversal();
@@ -139,6 +141,7 @@ public class BTree
         return values;
     }
 
+    /*Calls the search method if the root it not null */
     public TreeObject search(String k) {
         if(this.root == null) {
             return null;
@@ -148,12 +151,11 @@ public class BTree
     }
 
     
-    /*Insert function */
-    
+    /*The starting point for the insert method that decides if you are inserting into a root that is full and then you need to split nodes or if
+     * the root is not full and the key can be inserted directly into the root node.
+    */
     public void insert(TreeObject obj) throws IOException {
-
         Node r = root;
-
         if(r.numOfKeys == 2 * degree - 1) {
             Node s = BTreeSplitRoot();
             BTreeInsertNonFull(s, obj);
@@ -165,8 +167,7 @@ public class BTree
         }
     }
 
-    /*Helper function for insert */
-    
+    /*Helper function for insert that splits the root if necessary and also calls splitchild*/
     public Node BTreeSplitRoot() {
         Node s = new Node(false, degree, nextDiskAddress);
         s.isLeaf = false;
@@ -176,11 +177,9 @@ public class BTree
         root = s;
         BTreeSplitChild(s, 0);
         return s;
-
     }
 
-        /*Helper function for insert */
-        
+    /*Helper function for insert that is used to insert into a node if it is not full*/
     public void BTreeInsertNonFull (Node x, TreeObject k) {
         
         int i = x.numOfKeys - 1;
@@ -219,7 +218,6 @@ public class BTree
                             return;
                         }   
                     }
-                        
                     BTreeSplitChild(x, i);
                     if(k.compareTo( x.keys[i]) > 0) {
                         i = i + 1;
@@ -228,16 +226,13 @@ public class BTree
                 }
                 BTreeInsertNonFull(x.children[i], k);    
             }
-            
         }
     }
 
 
-    /*Helper function for insert */
-    
+    /*Helper function for insert that splits children nodes if necessary*/
     public void BTreeSplitChild(Node x, int i) {
         Node y = x.children[i]; 
-
         Node z = new Node(true, degree, nextDiskAddress);
         z.isLeaf = y.isLeaf;
         z.numOfKeys = degree - 1;
@@ -257,14 +252,12 @@ public class BTree
         }
         x.children[i + 1] = z;
 
-
         for(int j = x.numOfKeys - 1; j >= i; j--) {
             x.keys[j + 1] = x.keys[j];
         }
         x.keys[i] = y.keys[degree - 1];
         y.keys[degree - 1] = null;
         x.numOfKeys = x.numOfKeys + 1;
-
         //diskwrite(y)
         //diskwrite(z)
         //diskwrite(x)
@@ -274,7 +267,6 @@ public class BTree
 
 
     /*Read from the disk*/
-    
     public Node diskRead(long diskAddress) throws IOException{
         
         if(diskAddress == 0) {
@@ -306,17 +298,11 @@ public class BTree
             childrenRead[i] = new Node(false, i, diskAddress);
         }
 
-
-
-
         byte flag = buffer.get();
         boolean leaf = false;
         if(flag == 1) {
             leaf = true;
         }
-
-
-
 
         Node x = new Node(leaf, flag, diskAddress);
         x.numOfKeys = numberKeys;
@@ -336,7 +322,6 @@ public class BTree
 
         file.position(x.address);
         buffer.clear();
-
         buffer.putInt(x.numOfKeys);
         
 
@@ -361,8 +346,8 @@ public class BTree
         file.write(buffer);
     }
 
-
-        String[] getSortedKeyArray() {
+    /*Method used to get the elements inside of the BTreeand then returns them as an array of strings */
+    String[] getSortedKeyArray() {
 
         ArrayList<String> inputs = inorderTransversal();
 
@@ -372,14 +357,6 @@ public class BTree
         return arr;
 
     }
-
-    
-
-    
-
-
-
-
 
     void incrementNumOfNodes() {
         numOfNodes++;
