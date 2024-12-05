@@ -157,15 +157,19 @@ public class SSHCreateBTree {
 
     /* Method for adding to database */
     private static void saveBTreeToDatabase(BTree btree, String treeType) {
-        //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
-        String url = "jdbc:sqlite:output/dump-files/" + treeType + ".db";
+
+        /* TODO: Create column for keys and an associated column for frequency */
+        
+        String url = "jdbc:sqlite:output/dump-files/" + treeType + ".db"; //change to SSHLogDB
+
+        treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 System.out.println("Connected to the database.");
 
                 // Create the BTree table
-                String createTableSQL = "CREATE TABLE IF NOT EXISTS BTree (key TEXT PRIMARY KEY)";
+                String createTableSQL = "CREATE TABLE IF NOT EXISTS " + treeType + " (key TEXT PRIMARY KEY)";
                 try(Statement stmt = conn.createStatement()) {
                     stmt.execute(createTableSQL);
                 }
