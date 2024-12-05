@@ -30,7 +30,7 @@ public class SSHCreateBTree {
             System.out.println("\t--database=<yes/no> [--debug=<0|1>]\n");
             return;
         }
-		//System.out.println("Hello world from cs321.create.SSHCreateBTree.main");
+		System.out.println("Parsing arguments...");
         SSHCreateBTreeArguments myArgs = parseArguments(args); // Save into variable myArgs based on arguments from args; object = SSHCreateBTreeArguments 
         
         BTree btree = new BTree(myArgs.getDegree(), myArgs.getFileName());
@@ -138,7 +138,6 @@ public class SSHCreateBTree {
                 SSHFileName = arg.substring("--sshFileName=".length());
             } else if (arg.startsWith("--type=")) {
                 treeType = arg.substring("--type=".length());
-                //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
             } else if (arg.startsWith("--cache-size=")) {
                 cacheSize = Integer.parseInt(arg.substring("--cache-size=".length())); // Run an if statement after useCache, and then see if there is a value for this
             } else if (arg.startsWith("--database=")) {
@@ -158,6 +157,7 @@ public class SSHCreateBTree {
 
     /* Method for adding to database */
     private static void saveBTreeToDatabase(BTree btree, String treeType) {
+        //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
         String url = "jdbc:sqlite:" + treeType + ".db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
@@ -179,6 +179,7 @@ public class SSHCreateBTree {
                     try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                         pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
+                        System.out.println("Inserting key: " + key);
                     }
                 }
 
