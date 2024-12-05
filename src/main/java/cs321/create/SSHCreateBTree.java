@@ -100,6 +100,9 @@ public class SSHCreateBTree {
             ex.printStackTrace();
         }
 
+        /* Argument to dump into a .txt file */
+        // name: dump-<tree-type>.<degree-number>.txt
+
         /* Save to database file if database is checked 'yes' */
         if(myArgs.getDatabase()) {
             saveBTreeToDatabase(btree, myArgs.getTreeType());
@@ -160,12 +163,12 @@ public class SSHCreateBTree {
 
         /* TODO: Create column for keys and an associated column for frequency */
         
-        String url = "jdbc:sqlite:output/dump-files/SSHLogDB.db";
+        String url = "jdbc:sqlite:output/db-search/SSHLogDB.db";
 
         treeType = treeType.replaceAll("-","_"); // remove all '-'s. SQLite has issues with '-' in naming conventions
 
-        try (Connection conn = DriverManager.getConnection(url)) {
-            if (conn != null) {
+        try (Connection connection = DriverManager.getConnection(url)) {
+            if (connection != null) {
                 System.out.println("Connected to the database.");
 
                 // Create the BTree table
@@ -175,6 +178,7 @@ public class SSHCreateBTree {
                 //}
 
                 // Create the BTree Table
+                Statement statement = connection.createStatement();
                 statement.executeUpdate("drop table if exists " + treeType);
                 statement.executeUpdate("create table " + treeType + " (Key string, Frequency integer)");
 
@@ -184,8 +188,8 @@ public class SSHCreateBTree {
                 String[] sortedKeys = btree.getSortedKeyArray();
 
                 for (String key : sortedKeys) {
-                    String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (key) VALUES (?)";
-                    try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                    String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Key) VALUES (?)";
+                    try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
                         pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
                         System.out.println("Inserting key: " + key + "Frequency: "); // how do I add the frequency?
