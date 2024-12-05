@@ -26,7 +26,7 @@ public class SSHCreateBTree {
 	{
         if(args.length < 5){
             System.out.println("Usage: java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \\\n");
-            System.out.println("\t--sshFileName=<ssh-file> --type=<tree-type> [--cache-size=<n>]\\\n");
+            System.out.println("\t--sshFile=<ssh-file> --type=<tree-type> [--cache-size=<n>]\\\n");
             System.out.println("\t--database=<yes/no> [--debug=<0|1>]\n");
             return;
         }
@@ -134,8 +134,8 @@ public class SSHCreateBTree {
                 useCache = Boolean.parseBoolean(arg.substring("--cache=".length()));
             } else if (arg.startsWith("--degree=")) {
                 degree = Integer.parseInt(arg.substring("--degree=".length()));
-            } else if (arg.startsWith("--sshFileName=")){
-                SSHFileName = arg.substring("--sshFileName=".length());
+            } else if (arg.startsWith("--sshFile=")){
+                SSHFileName = arg.substring("--sshFile=".length());
             } else if (arg.startsWith("--type=")) {
                 treeType = arg.substring("--type=".length());
             } else if (arg.startsWith("--cache-size=")) {
@@ -158,7 +158,7 @@ public class SSHCreateBTree {
     /* Method for adding to database */
     private static void saveBTreeToDatabase(BTree btree, String treeType) {
         //treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
-        String url = "jdbc:sqlite:" + treeType + ".db";
+        String url = "jdbc:sqlite:output/dump-files/" + treeType + ".db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
