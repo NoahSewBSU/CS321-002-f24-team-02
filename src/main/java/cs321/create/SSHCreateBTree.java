@@ -160,7 +160,7 @@ public class SSHCreateBTree {
 
         /* TODO: Create column for keys and an associated column for frequency */
         
-        String url = "jdbc:sqlite:output/dump-files/" + treeType + ".db"; //change to SSHLogDB
+        String url = "jdbc:sqlite:output/dump-files/SSHLogDB.db";
 
         treeType = treeType.replaceAll("-","_"); // remove all '-'s. SQLite has issues with '-' in naming conventions
 
@@ -169,21 +169,26 @@ public class SSHCreateBTree {
                 System.out.println("Connected to the database.");
 
                 // Create the BTree table
-                String createTableSQL = "CREATE TABLE IF NOT EXISTS " + treeType + " (key TEXT PRIMARY KEY)";
-                try(Statement stmt = conn.createStatement()) {
-                    stmt.execute(createTableSQL);
-                }
+                //String createTableSQL = "CREATE TABLE IF NOT EXISTS " + treeType + " (key TEXT PRIMARY KEY)";
+                //try(Statement stmt = conn.createStatement()) {
+                //    stmt.execute(createTableSQL);
+                //}
+
+                // Create the BTree Table
+                statement.executeUpdate("drop table if exists " + treeType);
+                statement.executeUpdate("create table " + treeType + " (Key string, Frequency integer)");
+
 
                 // Insert BTree keys
 
                 String[] sortedKeys = btree.getSortedKeyArray();
 
                 for (String key : sortedKeys) {
-                    String insertSQL = "INSERT OR IGNORE INTO BTree (key) VALUES (?)";
+                    String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (key) VALUES (?)";
                     try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                         pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
-                        System.out.println("Inserting key: " + key);
+                        System.out.println("Inserting key: " + key + "Frequency: "); // how do I add the frequency?
                     }
                 }
 
