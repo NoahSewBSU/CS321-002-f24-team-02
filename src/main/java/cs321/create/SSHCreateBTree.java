@@ -99,8 +99,12 @@ public class SSHCreateBTree {
 
         /* Save to database file if database is checked 'yes' */
         if(myArgs.getDatabase()) {
-            saveBTreeToDatabase(btree);
+            saveBTreeToDatabase(btree, myArgs.getTreeType());
         }
+
+        System.out.println("Reading file: " + myArgs.getFileName());
+        System.out.println("Tree type: " + myArgs.getTreeType());
+        System.out.println("Keys inserted: " + btree.getSortedKeyArray().length);
 
 	}
 
@@ -149,8 +153,8 @@ public class SSHCreateBTree {
     }
 
     /* Method for adding to database */
-    private static void saveBTreeToDatabase(BTree btree) {
-        String url = "jdbc:sqlite:btree.db";
+    private static void saveBTreeToDatabase(BTree btree, String treeType) {
+        String url = "jdbc:sqlite:" + treeType + ".db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
