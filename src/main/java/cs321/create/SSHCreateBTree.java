@@ -26,7 +26,7 @@ public class SSHCreateBTree {
 	{
         if(args.length < 5){
             System.out.println("Usage: java -jar build/libs/SSHCreateBTree.jar --cache=<0/1> --degree=<btree-degree> \\\n");
-            System.out.println("\t--sshFile=<ssh-file> --type=<tree-type> [--cache-size=<n>]\\\n");
+            System.out.println("\t--sshFileName=<ssh-file> --type=<tree-type> [--cache-size=<n>]\\\n");
             System.out.println("\t--database=<yes/no> [--debug=<0|1>]\n");
             return;
         }
@@ -131,9 +131,9 @@ public class SSHCreateBTree {
             } else if (arg.startsWith("--cache-size=")) {
                 cacheSize = Integer.parseInt(arg.substring("--cache-size=".length())); // Run an if statement after useCache, and then see if there is a value for this
             } else if (arg.startsWith("--database=")) {
-                if(arg.substring("--database=".length()) == "yes"){
+                if(arg.substring("--database=".length()).equals("yes")){
                     database = true;
-                } else if(arg.substring("--database=".length()) == "no"){
+                } else if(arg.substring("--database=".length()).equals("no")){
                     database = false;
                 }
             } else if (arg.startsWith("--debug=")) {
@@ -171,7 +171,7 @@ public class SSHCreateBTree {
                     }
                 }
 
-                System.out.println("BTree saved to databse successfully.");
+                System.out.println("BTree saved to database successfully.");
 
             }
         } catch (SQLException e) {
