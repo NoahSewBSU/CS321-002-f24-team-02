@@ -97,7 +97,10 @@ public class SSHCreateBTree {
             ex.printStackTrace();
         }
 
-        /* Add code here to save to database */
+        /* Save to database file if database is checked 'yes' */
+        if(myArgs.getDatabase()) {
+            saveBTreeToDatabase(btree);
+        }
 
 	}
 
