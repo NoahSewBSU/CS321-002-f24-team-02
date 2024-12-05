@@ -28,7 +28,7 @@ public class SSHSearchDatabase
                 database = arg.substring("--database=".length());
             } else if (arg.startsWith("--type=")) {
                 type = arg.substring("--type=".length());
-                type = type.replaceAll("-","");
+                type = type.replaceAll("-","_");
             } else if (arg.startsWith("--top-frequency=")) {
                 topFrequency = Integer.parseInt(arg.substring("--top-frequency=".length()));
             }

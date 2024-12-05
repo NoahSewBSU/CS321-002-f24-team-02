@@ -162,7 +162,7 @@ public class SSHCreateBTree {
         
         String url = "jdbc:sqlite:output/dump-files/" + treeType + ".db"; //change to SSHLogDB
 
-        treeType = treeType.replaceAll("-",""); // remove all '-'s. SQLite has issues with '-' in naming conventions
+        treeType = treeType.replaceAll("-","_"); // remove all '-'s. SQLite has issues with '-' in naming conventions
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
