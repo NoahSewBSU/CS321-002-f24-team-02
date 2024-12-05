@@ -72,18 +72,21 @@ public class SSHCreateBTree {
                             } else if(typeParts[1] == "timestamp"){
                                 btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
+                            break;
                         case "reverse":
                             if(typeParts[1] == "ip"){
                                 btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
                                 btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
+                            break;
                         case "invalid":
                             if(typeParts[1] == "ip"){
                                 btree.insert(new TreeObject(arr[2] + " " + arr[4]));
                             } else if(typeParts[1] == "timestamp"){
                                 btree.insert(new TreeObject(arr[2] + " " + arr[1]));
                             }
+                            break;
                         default:
                             break;
                         
@@ -102,6 +105,7 @@ public class SSHCreateBTree {
             saveBTreeToDatabase(btree, myArgs.getTreeType());
         }
 
+        /* Confirmations of progress */
         System.out.println("Reading file: " + myArgs.getFileName());
         System.out.println("Tree type: " + myArgs.getTreeType());
         System.out.println("Keys inserted: " + btree.getSortedKeyArray().length);
