@@ -35,11 +35,6 @@ public class SSHCreateBTree {
         
         BTree btree = new BTree(myArgs.getDegree(), myArgs.getFileName());
 
-        /* TESTER */
-        // change this later...   
-        // BTree newTree = new BTree(2,"test_doc.txt");
-        // scan files, logs, and insert keys based on BTree
-
         // try-catch is a requirement to go through files in java
         try (Scanner input = new Scanner(new File(myArgs.getFileName()))){
 
@@ -54,6 +49,7 @@ public class SSHCreateBTree {
                 // check for "userip" case
                 if (typeParts[0].equals("user")) {
                     btree.insert(new TreeObject(arr[3] + " " + arr[4]));
+                    System.out.println(arr[3] + " " + arr[4]);
                 }
 
                 // check for all other cases
@@ -183,7 +179,7 @@ public class SSHCreateBTree {
                 long[] sortedFrequencies = btree.getSortedCount();
 
                 for (String key : sortedKeys) {
-                    String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Key) VALUES (?)";
+                    String insertSQL = "INSERT INTO " + treeType + " (Key) VALUES (?)";
                     try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
                         pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
@@ -192,7 +188,7 @@ public class SSHCreateBTree {
                 }
 
                 for (long frequency : sortedFrequencies) {
-                    String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Frequency) VALUES (?)";
+                    String insertSQL = "INSERT INTO " + treeType + " (Frequency) VALUES (?)";
                     try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
                         pstmt.setInt(1, (int)frequency);
                         pstmt.executeUpdate();
