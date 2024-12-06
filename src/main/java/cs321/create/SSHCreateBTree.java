@@ -180,7 +180,7 @@ public class SSHCreateBTree {
                 // Insert BTree keys
 
                 String[] sortedKeys = btree.getSortedKeyArray();
-                Long[] sortedFrequencies = btree.getSortedCount();
+                long[] sortedFrequencies = btree.getSortedCount();
 
                 for (String key : sortedKeys) {
                     String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Key) VALUES (?)";
@@ -210,7 +210,7 @@ public class SSHCreateBTree {
 
     private static void saveToTextFile(BTree btree, String treeType){
 
-
+        
 
     }
 
