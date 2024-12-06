@@ -389,11 +389,15 @@ public class BTree
     }
 
     /*Method used to get the counts of each treeobject inside the btree and then retuns an array of longs */
-    public Long[] getSortedCount() {
+    public long[] getSortedCount() {
         ArrayList<Long> inputs2 = inorderTransversal2();
 
-        Long[] arr2 = new Long[inputs2.size()];
-        arr2 = inputs2.toArray(arr2);
+        long[] arr2 = new long[inputs2.size()];
+        int index = 0;
+        //arr2 = inputs2.toArray(arr2);
+        for(final long value : inputs2) {
+            arr2[index++] = value;
+        }
 
         return arr2;
     }

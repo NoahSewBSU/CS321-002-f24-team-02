@@ -180,7 +180,7 @@ public class SSHCreateBTree {
                 // Insert BTree keys
 
                 String[] sortedKeys = btree.getSortedKeyArray();
-                Long[] sortedFrequencies = btree.getSortedCount();
+                long[] sortedFrequencies = btree.getSortedCount();
 
                 for (String key : sortedKeys) {
                     String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Key) VALUES (?)";
@@ -191,10 +191,10 @@ public class SSHCreateBTree {
                     }
                 }
 
-                for (Long frequency : sortedFrequencies) {
+                for (long frequency : sortedFrequencies) {
                     String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Frequency) VALUES (?)";
                     try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
-                        pstmt.setInt(1, frequency.toInt());
+                        pstmt.setInt(1, (int)frequency);
                         pstmt.executeUpdate();
                         System.out.println("Inserting frequency: " + frequency);
                     }
