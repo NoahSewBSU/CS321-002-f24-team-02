@@ -26,6 +26,7 @@ public class BTree
     private long rootAddress = METADATA_SIZE;
 
     private ArrayList<String> values = new ArrayList<String>();
+    private ArrayList<Long> values2 = new ArrayList<Long>();
 
 
     private Node root = new Node(true, METADATA_SIZE, nextDiskAddress);
@@ -109,6 +110,26 @@ public class BTree
             return values;
         }
 
+        public ArrayList<Long> inorderTransversal2() {
+            
+            int i = 0;
+            for(i = 0; i < numOfKeys; i++) {
+                if(isLeaf == false) {
+                    children[i].inorderTransversal();
+                }
+                values2.add(keys[i].getCount());
+            }
+
+            if(isLeaf == false) {
+                children[i].inorderTransversal();
+            }
+    
+            return values2;
+        }
+
+
+
+
         /*Searches trhough the Btree and checks if the given string is inside of the BTree */
         public TreeObject search(String k) {
             if(numOfKeys == 0) {
@@ -139,6 +160,15 @@ public class BTree
         }
 
         return values;
+    }
+
+    /*Calls the inorder transversal method if the root it not null */
+    public ArrayList<Long> inorderTransversal2() {
+        if(this.root != null) {
+            this.root.inorderTransversal2();
+        }
+
+        return values2;
     }
 
     /*Calls the search method if the root it not null */
@@ -356,6 +386,16 @@ public class BTree
 
         return arr;
 
+    }
+
+
+    public Long[] getSortedCount() {
+        ArrayList<Long> inputs2 = inorderTransversal2();
+
+        Long[] arr2 = new Long[inputs2.size()];
+        arr2 = inputs2.toArray(arr2);
+
+        return arr2;
     }
 
     void incrementNumOfNodes() {
