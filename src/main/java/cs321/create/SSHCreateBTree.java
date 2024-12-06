@@ -171,12 +171,6 @@ public class SSHCreateBTree {
             if (connection != null) {
                 System.out.println("Connected to the database.");
 
-                // Create the BTree table
-                //String createTableSQL = "CREATE TABLE IF NOT EXISTS " + treeType + " (key TEXT PRIMARY KEY)";
-                //try(Statement stmt = conn.createStatement()) {
-                //    stmt.execute(createTableSQL);
-                //}
-
                 // Create the BTree Table
                 Statement statement = connection.createStatement();
                 statement.executeUpdate("drop table if exists " + treeType);
@@ -186,13 +180,23 @@ public class SSHCreateBTree {
                 // Insert BTree keys
 
                 String[] sortedKeys = btree.getSortedKeyArray();
+                Integer[] sortedFrequencies = btree.getSortedCount();
 
                 for (String key : sortedKeys) {
                     String insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Key) VALUES (?)";
                     try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
                         pstmt.setString(1, key.toString());
                         pstmt.executeUpdate();
-                        System.out.println("Inserting key: " + key + "Frequency: "); // how do I add the frequency?
+                        System.out.println("Inserting key: " + key);
+                    }
+                }
+
+                for (Integer frequency : sortedFrequency) {
+                    Integer insertSQL = "INSERT OR IGNORE INTO " + treeType + " (Frequency) VALUES (?)";
+                    try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
+                        pstmt.setInt(1, frequency.toInt());
+                        pstmt.executeUpdate();
+                        System.out.println("Inserting frequency: " + frequency);
                     }
                 }
 
@@ -202,6 +206,12 @@ public class SSHCreateBTree {
         } catch (SQLException e) {
             System.out.println("Error saving to database: " + e.getMessage());
         }
+    }
+
+    private static void saveToTextFile(BTree btree, String treeType){
+
+        
+
     }
 
 	/** 
