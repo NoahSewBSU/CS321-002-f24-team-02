@@ -397,6 +397,7 @@ public class BTree
         //arr2 = inputs2.toArray(arr2);
         for(final long value : inputs2) {
             arr2[index++] = value;
+            System.out.println(value);
         }
 
         return arr2;
