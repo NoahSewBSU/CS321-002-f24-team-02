@@ -181,12 +181,6 @@ public class SSHCreateBTree {
                 String[] sortedKeys = btree.getSortedKeyArray();
                 long[] sortedFrequencies = btree.getSortedCount();
 
-                System.out.println("\n\n");
-                for(int i = 0; i < sortedKeys.length; i++) {
-
-                    System.out.println("Key: " +sortedKeys[i] + " Frequency: " + sortedFrequencies[i]);
-                }
-                System.out.println("\n\n");
 
                 String insertObjects = "INSERT INTO " + treeType + " (Key, Frequency) VALUES (?, ?)";
 
