@@ -115,13 +115,13 @@ public class BTree
             int i = 0;
             for(i = 0; i < numOfKeys; i++) {
                 if(isLeaf == false) {
-                    children[i].inorderTransversal();
+                    children[i].inorderTransversal2();
                 }
                 values2.add(keys[i].getCount());
             }
 
             if(isLeaf == false) {
-                children[i].inorderTransversal();
+                children[i].inorderTransversal2();
             }
     
             return values2;
