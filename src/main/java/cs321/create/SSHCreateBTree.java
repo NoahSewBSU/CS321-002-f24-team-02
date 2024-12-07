@@ -110,6 +110,7 @@ public class SSHCreateBTree {
         System.out.println("Reading file: " + myArgs.getFileName());
         System.out.println("Tree type: " + myArgs.getTreeType());
         System.out.println("Keys inserted: " + btree.getSortedKeyArray().length);
+        System.out.println("Frequencies inserted: " + btree.getSortedCount().length);
 
 	}
 
@@ -208,11 +209,12 @@ public class SSHCreateBTree {
 
     private static void saveToTextFile(BTree btree, String treeType){
 
-        String location = "dump-" + treeType + ".0.txt";
+        // String location = "dump-" + treeType + ".0.txt";
 
-        try(FileWriter writer = new FileWriter(location));
-            btree.BTreeInsertNonFull(null, null);
-            System.out.println("BTree has been written to " + location);
+        // try(FileWriter writer = new FileWriter(location)){
+        //     btree.BTreeInsertNonFull(null, null);
+        //     System.out.println("BTree has been written to " + location);
+        // }
 
     }
 
