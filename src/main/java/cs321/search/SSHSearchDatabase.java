@@ -47,23 +47,22 @@ public class SSHSearchDatabase
         int frequencyCounter = 0;
         Connection connection = null;
 
+        String orderTable = "SELECT Key, Frequency FROM " + type +
+                            " ORDER BY Frequency DESC LIMIT " + topFrequency;
+
+        String url = "jdbc:sqlite:" + database;
+
         try {
           // create a database connection
-          connection = DriverManager.getConnection("jdbc:sqlite:" + database);
+          connection = DriverManager.getConnection(url);
           Statement statement = connection.createStatement();
           statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-        //   statement.executeUpdate("drop table if exists " + type);
-        //   statement.executeUpdate("create table " + type + " (Key string, Frequency integer)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-14:18', 2)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-22:11', 1)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-08:32', 3)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-09:21', 3)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-06:14', 4)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-23:56', 2)");
-        //   statement.executeUpdate("insert into " + type + " values('Accepted-15:01', 1)");
         
-          ResultSet rs = statement.executeQuery("select * from " + type);
+          ResultSet rs = statement.executeQuery(orderTable);
+
+          
+
+
           while(rs.next() && frequencyCounter < topFrequency)
           {
             // read the result set

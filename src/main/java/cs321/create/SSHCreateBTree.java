@@ -217,6 +217,13 @@ public class SSHCreateBTree {
 
         // String location = "dump-" + treeType + ".0.txt";
 
+        //getSortedKeyArray()
+        //getSortedCount()
+
+        //for(length array){
+            // 
+        //}
+
         // try(FileWriter writer = new FileWriter(location)){
         //     btree.BTreeInsertNonFull(null, null);
         //     System.out.println("BTree has been written to " + location);
