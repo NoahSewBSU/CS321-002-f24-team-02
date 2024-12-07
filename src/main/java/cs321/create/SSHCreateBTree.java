@@ -7,6 +7,8 @@ import cs321.common.ParseArgumentException;
 
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -206,7 +208,7 @@ public class SSHCreateBTree {
 
     private static void saveToTextFile(BTree btree, String treeType){
 
-        
+        try(FileWrite writer = new FIleWriter("dump-" + treeType + ".0.txt"));
 
     }
 
