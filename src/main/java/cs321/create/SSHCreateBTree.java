@@ -208,7 +208,11 @@ public class SSHCreateBTree {
 
     private static void saveToTextFile(BTree btree, String treeType){
 
-        try(FileWrite writer = new FIleWriter("dump-" + treeType + ".0.txt"));
+        String location = "dump-" + treeType + ".0.txt";
+
+        try(FileWriter writer = new FileWriter(location));
+            btree.BTreeInsertNonFull(null, null);
+            System.out.println("BTree has been written to " + location);
 
     }
 
