@@ -393,11 +393,13 @@ public class BTree
         ArrayList<Long> inputs2 = inorderTransversal2();
 
         long[] arr2 = new long[inputs2.size()];
+        System.out.println("\n--------------------\n");
+        System.out.println(inputs2.size()+ "\n");
         int index = 0;
         //arr2 = inputs2.toArray(arr2);
         for(final long value : inputs2) {
             arr2[index++] = value;
-            System.out.println(value);
+            
         }
 
         return arr2;
