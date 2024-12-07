@@ -6,6 +6,7 @@ import cs321.common.ParseArgumentUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,50 +46,55 @@ public class SSHSearchDatabase
         // System.out.println(topFrequency+"\n");
 
         int frequencyCounter = 0;
-        Connection connection = null;
 
         String orderTable = "SELECT Key, Frequency FROM " + type +
                             " ORDER BY Frequency DESC LIMIT " + topFrequency;
 
         String url = "jdbc:sqlite:" + database;
 
-        try {
-          // create a database connection
-          connection = DriverManager.getConnection(url);
-          Statement statement = connection.createStatement();
-          statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        try (Connection conn = DriverManager.getConnection(url)) {
+
+          if(conn != null) {
+
+            try(PreparedStatement pstmt = conn.prepareStatement(orderTable);
+
+              ResultSet rs = pstmt.executeQuery()) {
+              
+
+              System.out.println("Top " + topFrequency + "highest frequencies:");
+              while (rs.next()) {
+                String key = rs.getString("Key");
+                int frequency = rs.getInt("Frequency");
+                System.out.println("Key: " + key + ", Frequency: " + frequency);
+              }
+
+
+
+              }
+          }
+          // // create a database connection
+          // connection = DriverManager.getConnection(url);
+          // Statement statement = connection.createStatement();
+          // statement.setQueryTimeout(30);  // set timeout to 30 sec.
         
-          ResultSet rs = statement.executeQuery(orderTable);
+          // ResultSet rs = statement.executeQuery(orderTable);
 
           
 
 
-          while(rs.next() && frequencyCounter < topFrequency)
-          {
-            // read the result set
-            System.out.println("Key: " + rs.getString("Key"));
-            System.out.println("Frequency: " + rs.getInt("Frequency"));
-            frequencyCounter++;
-          }
+          // while(rs.next())
+          // {
+          //   // read the result set
+          //   System.out.println("Key: " + rs.getString("Key"));
+          //   System.out.println("Frequency: " + rs.getInt("Frequency"));
+          //   frequencyCounter++;
+          // }
         }
         catch(SQLException e)
         {
           // if the error message is "out of memory",
           // it probably means no database file is found
           System.err.println(e.getMessage());
-        }
-        finally
-        {
-          try
-          {
-            if(connection != null)
-              connection.close();
-          }
-          catch(SQLException e)
-          {
-            // connection close failed.
-            System.err.println(e.getMessage());
-          }
         }
       }
     }
