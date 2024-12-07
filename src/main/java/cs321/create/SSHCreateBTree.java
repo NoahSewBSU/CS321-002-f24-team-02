@@ -183,26 +183,20 @@ public class SSHCreateBTree {
 
                 System.out.println("\n\n");
                 for(int i = 0; i < sortedKeys.length; i++) {
+
                     System.out.println("Key: " +sortedKeys[i] + " Frequency: " + sortedFrequencies[i]);
                 }
                 System.out.println("\n\n");
 
-                for (String key : sortedKeys) {
-                    String insertSQL = "INSERT INTO " + treeType + " (Key) VALUES (?)";
-                    try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
-                        pstmt.setString(1, key.toString());
-                        pstmt.executeUpdate();
-                        System.out.println("Inserting key: " + key);
-                    }
-                }
+                String insertObjects = "INSERT INTO " + treeType + " (Key, Frequency) VALUES (?, ?)";
 
-                for (long frequency : sortedFrequencies) {
-                    String insertSQL = "INSERT INTO " + treeType + " (Frequency) VALUES (?)";
-                    try (PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
-                        pstmt.setInt(1, (int)frequency);
+                try (PreparedStatement pstmt = connection.prepareStatement(insertObjects)) {
+                    for (int i = 0; i < sortedKeys.length; i++) {
+                        pstmt.setString(1, sortedKeys[i]);
+                        pstmt.setInt(2,(int)sortedFrequencies[i]);
                         pstmt.executeUpdate();
-                        System.out.println("Inserting frequency: " + frequency);
                     }
+
                 }
 
                 System.out.println("BTree saved to database successfully.");

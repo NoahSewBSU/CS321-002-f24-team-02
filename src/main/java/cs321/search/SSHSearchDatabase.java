@@ -61,7 +61,7 @@ public class SSHSearchDatabase
               ResultSet rs = pstmt.executeQuery()) {
               
 
-              System.out.println("Top " + topFrequency + "highest frequencies:");
+              System.out.println("Top " + topFrequency + " highest frequencies:");
               while (rs.next()) {
                 String key = rs.getString("Key");
                 int frequency = rs.getInt("Frequency");
